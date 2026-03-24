@@ -1,0 +1,105 @@
+def get_custom_css():
+    return """
+    <style>
+    /* Dark Theme App Background */
+    .stApp {
+        background-color: #0b0f19;
+        color: #ffffff;
+    }
+    
+    /* Glowing Title */
+    .glowing-title {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 5rem;
+        font-weight: 900;
+        text-align: center;
+        margin-top: 5vh;
+        color: #ffffff;
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff;
+        animation: glow 1.5s ease-in-out infinite alternate;
+        letter-spacing: 4px;
+    }
+
+    /* Typewriter effect for subtitle */
+    .typewriter-text {
+        overflow: hidden; 
+        border-right: .15em solid #00ffff; 
+        white-space: nowrap; 
+        margin: 0 auto; 
+        letter-spacing: .15em; 
+        animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        text-align: center;
+        width: max-content;
+        color: #aaaaaa;
+        margin-bottom: 20px;
+    }
+
+    /* The typing effect */
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    /* The typewriter cursor effect */
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #00ffff; }
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        to   { text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff; }
+    }
+
+    /* Streamlit Primary Button Styling */
+    div.stButton > button {
+        background: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 2.5rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+        border-radius: 50px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-top: 1rem;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    div.stButton > button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(255, 0, 204, 0.6);
+        color: white;
+    }
+    
+    div.stButton > button p {
+        font-size: 1.2rem;
+    }
+
+    /* Target specific components to give them a glassmorphism feel */
+    [data-testid="stTabs"] {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 2rem;
+        margin-top: 1rem;
+    }
+
+    /* Tab Label Styling */
+    button[data-baseweb="tab"] {
+        color: #ffffff;
+        font-size: 1.1rem;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #00ffff !important;
+        border-bottom: 2px solid #00ffff !important;
+    }
+
+    /* Hide sidebar and header */
+    [data-testid="collapsedControl"] { display: none; }
+    section[data-testid="stSidebar"] { display: none; }
+    header[data-testid="stHeader"] { display: none; }
+    </style>
+    """

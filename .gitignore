@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+. streamlit/
+
+# Pytest cache
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# local history (if using IDE plugin)
+.history/
