@@ -158,10 +158,17 @@ def detection_hub():
     # --- FACE TAB ---
     with tab2:
         st.markdown("### Facial Emotion Detection")
-        st.write("Take a picture using your webcam to detect facial micro-expressions.")
+        st.write("Upload an image or take a picture using your webcam to detect facial micro-expressions.")
         
-        camera_image = st.camera_input("Capture an image for analysis")
-        if camera_image is not None:
+        image_source = st.radio("Choose Input Method", ["Upload Image", "Capture via Webcam"])
+        
+        image_data = None
+        if image_source == "Upload Image":
+            image_data = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+        else:
+            image_data = st.camera_input("Capture an image for analysis")
+            
+        if image_data is not None:
             if st.button("Predict Face Emotion", use_container_width=True, key="face_btn"):
                 # Display processing status
                 with st.spinner("Processing facial landmarks..."):
@@ -171,7 +178,7 @@ def detection_hub():
                         from deepface import DeepFace
                         
                         # Convert Streamlit BytesIO to OpenCV format
-                        file_bytes = np.asarray(bytearray(camera_image.read()), dtype=np.uint8)
+                        file_bytes = np.asarray(bytearray(image_data.read()), dtype=np.uint8)
                         opencv_image = cv2.imdecode(file_bytes, 1)
                         
                         # Analyze emotion
@@ -304,21 +311,23 @@ def detection_hub():
             st.info(f"**Detected Sound Characteristics:** {characteristics}")
             st.plotly_chart(plot_gauge(score, f"{detected_emotion} {emoji}"), use_container_width=True)
 
-        try:
-            # st.audio_input is available in Streamlit >= 1.35
-            audio_data = st.audio_input("Record Voice", key="audio_recorder")
-            if audio_data is not None:
-                st.audio(audio_data)
-                if st.button("Predict Voice Emotion", key="predict_voice"):
-                    process_voice(audio_data.getvalue())
-        except AttributeError:
-            # Fallback for older Streamlit versions
-            st.warning("Your Streamlit version does not support built-in audio recording yet. Please upload a file.")
-            uploaded_audio = st.file_uploader("Upload Audio", type=["wav", "mp3", "ogg"])
-            if uploaded_audio:
-                st.audio(uploaded_audio)
-                if st.button("Predict Voice Emotion", key="predict_voice_file"):
-                    process_voice(uploaded_audio.getvalue())
+        has_audio_input = hasattr(st, "audio_input")
+        if has_audio_input:
+            audio_source = st.radio("Choose Voice Input Method", ["Upload Audio", "Record Audio"], key="voice_input_method")
+        else:
+            st.warning("Your Streamlit version does not support built-in audio recording. Please upload a file.")
+            audio_source = "Upload Audio"
+            
+        audio_data = None
+        if audio_source == "Upload Audio":
+            audio_data = st.file_uploader("Upload an audio file", type=["wav", "mp3", "ogg"], key="voice_uploader")
+        else:
+            audio_data = st.audio_input("Record Voice", key="voice_recorder")
+            
+        if audio_data is not None:
+            st.audio(audio_data)
+            if st.button("Predict Voice Emotion", key="predict_voice_action", use_container_width=True):
+                process_voice(audio_data.getvalue())
 
 def main():
     # Inject Custom CSS

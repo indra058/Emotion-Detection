@@ -97,6 +97,56 @@ def get_custom_css():
         border-bottom: 2px solid #00ffff !important;
     }
 
+    /* Make all widget labels and text visible */
+    label, p, span {
+        color: #ffffff !important;
+    }
+
+    [data-testid="stRadio"] label, [data-testid="stRadio"] p, [data-testid="stRadio"] span {
+        color: #e0e0e0 !important;
+    }
+
+    @keyframes neon-pulse {
+        0% { box-shadow: 0 0 5px #00ffff, inset 0 0 5px #00ffff; border-color: #00ffff; }
+        50% { box-shadow: 0 0 20px #ff00cc, inset 0 0 10px #ff00cc; border-color: #ff00cc; }
+        100% { box-shadow: 0 0 5px #00ffff, inset 0 0 5px #00ffff; border-color: #00ffff; }
+    }
+
+    /* Style the file uploader and audio inputs to sit well on dark backgrounds */
+    [data-testid="stFileUploader"] {
+        background-color: transparent !important;
+    }
+    
+    [data-testid="stFileUploaderDropzone"], 
+    [data-testid="stAudioInput"],
+    [data-testid="stCameraInput"] {
+        background-color: #1a1e29 !important;
+        border: 2px dashed #00ffff !important;
+        border-radius: 15px !important;
+        animation: neon-pulse 2.5s infinite alternate !important;
+    }
+    
+    [data-testid="stFileUploaderDropzone"] *,
+    [data-testid="stAudioInput"] *,
+    [data-testid="stCameraInput"] * {
+        color: #ffffff !important;
+    }
+    
+    /* Ensure no white div wrappers inside audio remain */
+    [data-testid="stAudioInput"] div,
+    [data-testid="stCameraInput"] div {
+        background-color: transparent !important;
+    }
+    
+    /* Style the internal buttons inside these components */
+    [data-testid="stFileUploaderDropzone"] button,
+    [data-testid="stAudioInput"] button,
+    [data-testid="stCameraInput"] button {
+        background-color: #2a2e39 !important;
+        color: #ffffff !important;
+        border: 1px solid #00ffff !important;
+    }
+
     /* Hide sidebar and header */
     [data-testid="collapsedControl"] { display: none; }
     section[data-testid="stSidebar"] { display: none; }
