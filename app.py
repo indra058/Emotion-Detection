@@ -101,6 +101,64 @@ def landing_page():
         
         # Launch button
         if st.button("🚀 Launch Detector", use_container_width=True):
+            loading_container = st.empty()
+            with loading_container.container():
+                st.markdown("""
+                <style>
+                .cube-loader {
+                  width: 80px;
+                  height: 80px;
+                  position: relative;
+                  transform-style: preserve-3d;
+                  animation: rotateCube 2s infinite linear;
+                  margin: 0 auto;
+                }
+                .cube-loader .face {
+                  position: absolute;
+                  width: 80px;
+                  height: 80px;
+                  background: rgba(0, 255, 255, 0.05);
+                  border: 2px solid #00ffff;
+                  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.5);
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  color: #fff;
+                  font-weight: bold;
+                  font-size: 16px;
+                  text-shadow: 0 0 5px #00ffff;
+                }
+                .cube-loader .front  { transform: translateZ(40px); }
+                .cube-loader .back   { transform: rotateY(180deg) translateZ(40px); }
+                .cube-loader .right  { transform: rotateY(90deg) translateZ(40px); }
+                .cube-loader .left   { transform: rotateY(-90deg) translateZ(40px); }
+                .cube-loader .top    { transform: rotateX(90deg) translateZ(40px); }
+                .cube-loader .bottom { transform: rotateX(-90deg) translateZ(40px); }
+                
+                @keyframes rotateCube {
+                  0%   { transform: rotateX(0deg) rotateY(0deg); }
+                  100% { transform: rotateX(360deg) rotateY(360deg); }
+                }
+                @keyframes pulseText {
+                  0% { opacity: 0.4; }
+                  50% { opacity: 1; }
+                  100% { opacity: 0.4; }
+                }
+                </style>
+                <div style="perspective: 800px; padding: 40px 0;">
+                  <div class="cube-loader">
+                    <div class="face front">AI</div>
+                    <div class="face back">AI</div>
+                    <div class="face right">AI</div>
+                    <div class="face left">AI</div>
+                    <div class="face top">AI</div>
+                    <div class="face bottom">AI</div>
+                  </div>
+                  <h3 style='text-align:center; color:#00ffff; margin-top:50px; font-family: "Courier New", Courier, monospace; animation: pulseText 1.5s infinite;'>Calibrating 3D Neural Models...</h3>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                time.sleep(2.5)
             st.session_state.page = 'detector'
             st.rerun()
 
@@ -119,9 +177,27 @@ def detection_hub():
     # --- TEXT TAB ---
     with tab1:
         st.markdown("### Text Emotion Detection")
-        user_text = st.text_area("Enter textual content to analyze its emotional tone...", height=120, placeholder="E.g., I am feeling extremely excited about the new project!")
-        
-        if st.button("Predict Text Emotion"):
+
+        if "text_input_val" not in st.session_state:
+            st.session_state.text_input_val = ""
+
+        def clear_text():
+            st.session_state.text_input_val = ""
+
+        user_text = st.text_area(
+            "Enter textual content to analyze its emotional tone...", 
+            height=120, 
+            placeholder="E.g., I am feeling extremely excited about the new project!",
+            key="text_input_val"
+        )
+
+        btn_col1, btn_col2 = st.columns(2)
+        with btn_col1:
+            predict_btn = st.button("Predict Text Emotion", use_container_width=True)
+        with btn_col2:
+            st.button("Refresh / Clear", on_click=clear_text, use_container_width=True)
+
+        if predict_btn:
             if user_text.strip():
                 progress_text = "Analyzing textual semantics and sentiment..."
                 my_bar = st.progress(0, text=progress_text)
@@ -323,10 +399,23 @@ def detection_hub():
             audio_data = st.file_uploader("Upload an audio file", type=["wav", "mp3", "ogg"], key="voice_uploader")
         else:
             audio_data = st.audio_input("Record Voice", key="voice_recorder")
-            
+
+        def clear_voice():
+            if "voice_recorder" in st.session_state:
+                del st.session_state["voice_recorder"]
+            if "voice_uploader" in st.session_state:
+                del st.session_state["voice_uploader"]
+
         if audio_data is not None:
             st.audio(audio_data)
-            if st.button("Predict Voice Emotion", key="predict_voice_action", use_container_width=True):
+
+            btn_col1, btn_col2 = st.columns(2)
+            with btn_col1:
+                predict_voice_btn = st.button("Predict Voice Emotion", key="predict_voice_action", use_container_width=True)
+            with btn_col2:
+                st.button("Refresh / Clear", on_click=clear_voice, key="clear_voice_btn", use_container_width=True)
+
+            if predict_voice_btn:
                 process_voice(audio_data.getvalue())
 
 def main():
