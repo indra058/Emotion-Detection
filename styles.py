@@ -1,9 +1,14 @@
 def get_custom_css():
     return """
     <style>
-    /* Dark Theme App Background */
-    .stApp {
-        background-color: #0b0f19;
+    /* Dark Theme Animated App Background */
+    .stApp, [data-testid="stAppViewContainer"] {
+        background-color: #090b10 !important;
+        background-image: url("https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif") !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
         color: #ffffff;
     }
     
@@ -145,6 +150,29 @@ def get_custom_css():
         background-color: #2a2e39 !important;
         color: #ffffff !important;
         border: 1px solid #00ffff !important;
+    }
+
+    /* Style the Text Area widget to have a beautiful glassmorphism effect (letting the main animated background shine through) */
+    .stTextArea div[data-baseweb="textarea"],
+    .stTextArea div[data-baseweb="base-input"] {
+        background-color: rgba(10, 15, 30, 0.6) !important;
+        background-image: none !important; /* Removes broken GIPHY */
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid #00ffff !important;
+        border-radius: 10px !important;
+    }
+
+    .stTextArea textarea {
+        background-color: transparent !important;
+        color: #ffffff !important;
+        text-shadow: 1px 1px 3px #000000 !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stTextArea textarea::placeholder {
+        color: #dddddd !important;
+        text-shadow: 1px 1px 2px #000000 !important;
     }
 
     /* Hide sidebar and header */
